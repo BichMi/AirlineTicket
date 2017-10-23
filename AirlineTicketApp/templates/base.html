@@ -9,9 +9,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <html>
 	<head>
 		<title>{% block title %}Vemba - Website mua vé máy bay trực tuyến{% endblock title %}</title>
-
+		{% block thuvien %}
         <link href="{% static 'css/style.css' %}" rel='stylesheet' type='text/css' />
-		<link href="{% static 'css/user.css' %}" rel='stylesheet' type='text/css' />
+		<link href="{% static 'css/user_style.css' %}" rel='stylesheet' type='text/css' />
 		<link rel="shortcut icon" href="{% static 'images/favicon.png' %}" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,10 +23,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 		<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-		<script src="{% static 'js/jquery.min.js' %}"></script>
+		<script src="{% static 'js/jquery/jquery.min.js' %}"></script>
 		<!--script-->
-		<link rel="stylesheet" href="css/jquery.bxslider.css" type="text/css" />
-		<script src="{% static 'js/jquery.bxslider.js' %}"></script>
+		<link rel="stylesheet" href="{% static 'css/jquery.bxslider.css'%}" type="text/css" />
+		<script src="{% static 'js/jquery/jquery.bxslider.js' %}"></script>
 			<script type="text/javascript">
 				$(document).ready(function(){
 					$('.bxslider').bxSlider({
@@ -40,21 +40,22 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				});
 			</script>
 		<!--//script-->
+
 		<!--smoth-scrlling-->
-			<script type="text/javascript">
-				$(document).ready(function(){
-									$('a[href^="#"]').on('click',function (e) {
-									    e.preventDefault();
-									    var target = this.hash,
-									    $target = $(target);
-									    $('html, body').stop().animate({
-									        'scrollTop': $target.offset().top
-									    }, 1000, 'swing', function () {
-									        window.location.hash = target;
-									    });
-									});
+		<script type="text/javascript">
+			$(document).ready(function(){
+								$('a[href^="#"]').on('click',function (e) {
+								    e.preventDefault();
+								    var target = this.hash,
+								    $target = $(target);
+								    $('html, body').stop().animate({
+								        'scrollTop': $target.offset().top
+								    }, 1000, 'swing', function () {
+								        window.location.hash = target;
+								    });
 								});
-				</script>
+							});
+			</script>
 		<!--//smoth-scrlling-->
 		<!--start-top-nav-script-->
 		<script type="text/javascript" src="{% static 'js/flexy-menu.js' %}"></script>
@@ -65,28 +66,80 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		<!--webfonts-->
 		<!--start slider -->
 	    <link rel="stylesheet" href="{% static 'css/fwslider.css' %}" media="all">
-		<script src="{% static 'js/jquery-ui.min.js' %}"></script>
-		<script src="{% static 'js/css3-mediaqueries.js' %}"></script>
+		<script src="{% static 'js/jquery/jquery-ui.min.js'%}"></script>
+		<!--<script src="{% static 'js/css3-mediaqueries.js' %}"></script>-->
 		<script src="{% static 'js/fwslider.js' %}"></script>
 		<!--end slider -->
 		<!--calender-style-->
 		<link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}" />
 		<!--//calender-style-->
+
+		<!-- Search Flight -->
+		<!-- <link rel="stylesheet" type="text/css" href="css/search-flight.css">
+		<script type="text/javascript" src="js/search-flight.js"></script> -->
+
+		<link rel="stylesheet" type="text/css" media="all" href="{% static './css/daterangepicker.css'%}"/>
+		<script type="text/javascript" src="{% static './js/moment.js'%}"></script>
+		<script type="text/javascript" src="{% static './js/daterangepicker.js'%}"></script>
+
+		<!-- Login Form -->
+		<link rel="stylesheet" type="text/css" href="{% static './css/login-form.css'%}">
+		<script type="text/javascript" src="{% static './js/login-form.js'%}"></script>
+		{% endblock thuvien %}
+
 	</head>
+
 	<body>
-		<div class="header">
+		{% if request.user.is_authenticated %}
 			<div class="show_user">
-			{{ request.user.username }}
+				HELLO {{ request.user.username }}
 			</div>
+		{% else %}
+			<div class="show_user" hidden>
+				HELLO {{ request.user.username }}
+			</div>
+		{%endif  %}
+
+		<div class="clear"></div>
+		<div class="header">
 				<div class="wrap">
 				<!-- start-logo-->
 				<div class="logo">
-					<a href="base.html" ><img src="{% static 'images/logo.png'  %}" title="Vemba" /></a>
+					<a href="{% url 'home' %}" ><img src="{% static 'images/logo.png'  %}" title="Vemba" /></a>
 				</div>
 				<!-- //End-logo-->
 				<!-- start-top-nav-->
                     {% block content_main %}
-
+					 <div class="top-nav">
+						<ul class="flexy-menu thick orange">
+							<li class="active"><label><a href="{% url 'home' %}">Trang chủ</a></label></li>
+							<!--<li><label><a href="{% url 'ticket_book' %}">Đặt vé</a></label></li>-->
+							<li><label><a href="http://blogphuot.com/danhmuc/chuyen-phuot/nhan-vat">Blog</a></label></li>
+							<li><label><a href="#">Liên hệ</a></label></li>
+							{% if request.user.is_authenticated %}
+							<li><label><a type="button" href="{% url 'logout' %}">Đăng xuất</a></label></li>
+							{% else %}
+							<li><label><a type="button" data-toggle="modal" data-target="#myModal">Đăng nhập</a></label></li>
+							{%endif  %}
+						</ul>
+						<!-- <div class="search-box">
+							<div id="sb-search" class="sb-search">
+								<form>
+									<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search">
+									<input class="sb-search-submit" type="submit" value="">
+									<span class="sb-icon-search"> </span>
+								</form>
+							</div>
+						</div> -->
+						<!--search-scripts-->
+						<!-- <script src="js/modernizr.custom.js"></script>
+						<script src="js/classie.js"></script>
+						<script src="js/uisearch.js"></script>
+						<script>
+							new UISearch( document.getElementById( 'sb-search' ) );
+						</script> -->
+						<!--//search-scripts-->
+				</div>
                     {% endblock content_main %}
 				<!-- <div class="top-userinfo-nav">
 						<ul class="login-menu thick orange">
@@ -107,7 +160,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 
             <div class="modal-dialog">
-                    <div class="modal-content">
+
+				<div class="modal-content">
 
                         <div class="modal-header" align="center">
                             <img id="img_logo" src="{% static 'images/logo.png' %}">
@@ -131,6 +185,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     </div>
                                     <!--<input id="login_username" class="form-control" type="text" placeholder="Tài khoản" required>-->
 									{{ login_form.username }}
+
                                     <!--<input id="login_password" class="form-control" type="password" placeholder="Mật khẩu" required>-->
 									{{ login_form.password }}
                                     <div class="checkbox">
@@ -143,6 +198,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <div>
                                         <span><button type="submit" class="btn btn-primary btn-lg btn-block">Đăng nhập</button>
                                         <button id="login_register_btn" type="button" class="btn btn-link btn-block">Đăng ký</button></span>
+
                                         <button id="login_lost_btn" type="button" class="btn btn-link btn-block">Quên mật khẩu?</button>
                                     </div>
                                 </div>
@@ -151,12 +207,15 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
                             <!-- Begin | Lost Password Form -->
                             <form id="lost-form" style="display:none;">
+								{% csrf_token %}
+
                                 <div class="modal-body">
                                     <div id="div-lost-msg">
                                         <div id="icon-lost-msg" class="glyphicon glyphicon-chevron-right"></div>
                                         <span id="text-lost-msg">Nhập e-mail của bạn</span>
                                     </div>
-                                    <input id="lost_email" class="form-control" type="text" placeholder="E-Mail" required>
+									{{ register_form.email }}
+                                    <!--<input id="lost_email" class="form-control" type="text" placeholder="E-Mail" required>-->
                                 </div>
                                 <div class="modal-footer">
                                     <div>
@@ -170,39 +229,85 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             </form>
                             <!-- End | Lost Password Form -->
 
-                            <!-- Begin | Register Form -->
-                            <form id="register-form" style="display:none;">
-                                <div class="modal-body">
-                                    <div id="div-register-msg">
-                                        <div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
-                                        <span id="text-register-msg">Tạo tài khoản</span>
-                                    </div>
-                                    <input id="register_username" class="form-control" type="text" placeholder="Tài khoản" required>
-                                    <input id="register_email" class="form-control" type="text" placeholder="E-Mail" required>
-                                    <input id="register_password" class="form-control" type="password" placeholder="Mật khẩu" required>
-                                </div>
-                                <div class="modal-footer">
-                                    <div>
-                                        <button type="submit" class="btn btn-primary btn-lg btn-block">Đăng ký</button>
-                                    </div>
-                                    <div>
-                                        <button id="register_login_btn" type="button" class="btn btn-link">Đăng nhập</button>
-                                        <button id="register_lost_btn" type="button" class="btn btn-link">Quên mật khẩu?</button>
-                                    </div>
-                                </div>
-                            </form>
-                            <!-- End | Register Form -->
+							<!-- Begin | Register Form -->
+							<form id="register-form" action="{% url 'register' %}" method="post" style="display:none;">
+								{% csrf_token %}
+								<div class="modal-body">
+									<div id="div-register-msg">
+										<div id="icon-register-msg" class="glyphicon glyphicon-chevron-right"></div>
+										<span id="text-register-msg">Tạo tài khoản</span>
+									</div>
+
+									<div class="row" style="margin: 0px; padding: 0px">
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.username }}
+										</div>
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.email }}
+										</div>
+									</div>
+									<div class="row" style="margin: 0px; padding: 0px; margin-bottom: 10px">
+										<div class="col-md-6" style="margin-top: 0px; padding: 0px">
+											{{ register_form.password }}
+										</div>
+										<div class="col-md-6" style="margin-top: 0px; padding: 0px">
+											{{ register_form.confirm_password }}
+										</div>
+									</div>
+									<div class="clear"></div>
+
+									<div class="row" style="margin: 0px; padding: 0px">
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.last_name }}
+										</div>
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.first_name }}
+										</div>
+									</div>
+
+									<div class="row" style="margin: 0px; padding: 0px">
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.sex }}
+										</div>
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.date_of_birth }}
+										</div>
+									</div>
+
+									{{ register_form.contact_telephone }}
+
+									<div class="row" style="margin: 0px; padding: 0px">
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.nationality }}
+										</div>
+										<div class="col-md-6" style="margin: 0px; padding: 0px">
+											{{ register_form.certificate_of_identity_card }}
+										</div>
+									</div>
+
+								</div>
+								<div class="modal-footer">
+									<div>
+										<button type="submit" class="btn btn-primary btn-lg btn-block">Đăng ký</button>
+									</div>
+									<div>
+										<button id="register_login_btn" type="button" class="btn btn-link">Đăng nhập</button>
+										<button id="register_lost_btn" type="button" class="btn btn-link">Quên mật khẩu?</button>
+									</div>
+								</div>
+							</form>
+                    <!-- End | Register Form -->
+
+
 
                         </div>
                         <!-- End # DIV Form -->
 
                     </div>
-                </div>
+			</div>
 
 		</div>
-        {% endblock contentlogin %}
-
-
+        {% endblock contentlogin %} {% block images-slider %}
 		<!--start-images-slider-->
 		<div class="images-slider">
 			<!-- start slider -->
@@ -259,26 +364,392 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		        <div class="slidePrev"><span> </span></div>
 		        <div class="slideNext"><span> </span></div>
 		    </div>
+			{% endblock images-slider %}
 		    <!--/slider -->
 		</div>
+
 		<!--start-find-place-->
-		<div class="find-place">
-			<div class="wrap">
-				<!--strat-date-piker-->
-				  <script src="{% static 'http://code.jquery.com/ui/1.9.2/jquery-ui.js' %}"></script>
-				  <script>
-				  $(function() {
-				    $( "#datepicker" ).datepicker();
-				  });
-				  </script>
-				<!--/End-date-piker-->
-				<!-- <iframe class="search-flight" src="./search-flight.html"></iframe> -->
-				<div class="clear"> </div>
-			</div>
+		{% block find_place %}
+		<div class="find-header" style="background-color: #008aff;">
+			<h3 style="text-align: center;"> Tìm và đặt vé đơn giản với 3 bước </h3>
 		</div>
+		{% endblock find_place %}
+
+		{% block ticket_book %}
+        <form method="get" action="{% url 'ticket_book' %}">
+			<div class="find-place ticket-info">
+				<div class="row">
+					<div class="col-md-6">
+						<div>
+						  	<h2>Nơi khởi hành</h2>
+							{% block location_from %}{% endblock location_from %}
+						</div>
+						<div>
+						  	<h2>Nơi đến</h2>
+							{% block location_to %}{% endblock location_to %}
+						</div>
+						<div>
+						  	<h2>Hạng ghế</h2>
+							{% block seattype %}{% endblock seattype %}
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="col-md-6">
+						<div>
+							<h2 style="padding-left: 15px">Ngày khởi hành</h2>
+					      	<div class="container">
+					        <div class="well configurator" style="display: none">
+						        <div class="row">
+						            <div class="col-md-4">
+						              <div class="form-group">
+						                <label for="parentEl">parentEl</label>
+						                <input type="text" class="form-control" id="parentEl" value="" placeholder="body">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="startDate">startDate</label>
+						                <input type="text" class="form-control" id="startDate" value="2015-01-07">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="endDate">endDate</label>
+						                <input type="text" class="form-control" id="endDate" value="2015-01-07">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="minDate">minDate</label>
+						                <input type="text" class="form-control" id="minDate" value="" placeholder="YYYY-MM-DD">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="maxDate">maxDate</label>
+						                <input type="text" class="form-control" id="maxDate" value="" placeholder="YYYY-MM-DD">
+						              </div>
+
+						            </div>
+						            <div class="col-md-4">
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="autoApply"> autoApply
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="singleDatePicker" checked="checked"> singleDatePicker
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="showDropdowns"> showDropdowns
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="showWeekNumbers"> showWeekNumbers
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="showISOWeekNumbers"> showISOWeekNumbers
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="timePicker"> timePicker
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="timePicker24Hour"> timePicker24Hour
+						                </label>
+						              </div>
+
+						              <div class="form-group">
+						                <label for="timePickerIncrement">timePickerIncrement (in minutes)</label>
+						                <input type="text" class="form-control" id="timePickerIncrement" value="1">
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="timePickerSeconds"> timePickerSeconds
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="dateLimit"> dateLimit (with example date range span)
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="ranges"> ranges (with example predefined ranges)
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="locale"> locale (with example settings)
+						                </label>
+						                <label id="rtl-wrap">
+						                  <input type="checkbox" id="rtl"> RTL (right-to-left)
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="alwaysShowCalendars"> alwaysShowCalendars
+						                </label>
+						              </div>
+
+						            </div>
+						            <div class="col-md-4">
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="linkedCalendars" checked="checked"> linkedCalendars
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="autoUpdateInput" checked="checked"> autoUpdateInput
+						                </label>
+						              </div>
+
+						              <div class="checkbox">
+						                <label>
+						                  <input type="checkbox" id="showCustomRangeLabel" checked="checked"> showCustomRangeLabel
+						                </label>
+						              </div>
+
+						              <div class="form-group">
+						                <label for="opens">opens</label>
+						                <select id="opens" class="form-control">
+						                  <option value="right" selected>right</option>
+						                  <option value="left">left</option>
+						                  <option value="center">center</option>
+						                </select>
+						              </div>
+
+						              <div class="form-group">
+						                <label for="drops">drops</label>
+						                <select id="drops" class="form-control">
+						                  <option value="down" selected>down</option>
+						                  <option value="up">up</option>
+						                </select>
+						              </div>
+
+						              <div class="form-group">
+						                <label for="buttonClasses">buttonClasses</label>
+						                <input type="text" class="form-control" id="buttonClasses" value="btn btn-sm">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="applyClass">applyClass</label>
+						                <input type="text" class="form-control" id="applyClass" value="btn-success">
+						              </div>
+
+						              <div class="form-group">
+						                <label for="cancelClass">cancelClass</label>
+						                <input type="text" class="form-control" id="cancelClass" value="btn-default">
+						              </div>
+						            </div>
+						       	</div>      
+					        </div>
+
+							{% block startdate %}
+					        <div class="row">
+					          	<div class="col-md-4 demo">
+									<i class="glyphicon glyphicon-calendar fa fa-calendar" style="color: #000; top: 23px; right: 9px; float: right;"></i>
+						            <input id="config-demo" class="form-control" readonly="" style="width: 100%; cursor: pointer; background-color: #fff" type="text" name="StartDate">
+
+					          	</div>
+					        </div>
+							{% endblock startdate  %}
+
+					      </div>
+
+
+					      <script type="text/javascript">
+					      $(document).ready(function() {
+					        $('#config-text').keyup(function() {
+					          eval($(this).val());
+					        });
+
+					        $('.configurator input, .configurator select').change(function() {
+					          updateConfig();
+					        });
+
+					        $('.demo i').click(function() {
+					          $(this).parent().find('input').click();
+					        });
+
+					        $('#startDate').daterangepicker({
+					          singleDatePicker: true,
+					          startDate: moment().subtract(6, 'days')
+					        });
+
+					        $('#endDate').daterangepicker({
+					          singleDatePicker: true,
+					          startDate: moment()
+					        });
+
+					        updateConfig();
+
+					        function updateConfig() {
+					          var options = {};
+
+							  if ($('#singleDatePicker').is(':checked'))
+					            options.singleDatePicker = true;
+
+					          if ($('#showDropdowns').is(':checked'))
+					            options.showDropdowns = true;
+
+					          if ($('#showWeekNumbers').is(':checked'))
+					            options.showWeekNumbers = true;
+
+					          if ($('#showISOWeekNumbers').is(':checked'))
+					            options.showISOWeekNumbers = true;
+
+					          if ($('#timePicker').is(':checked'))
+					            options.timePicker = true;
+
+					          if ($('#timePicker24Hour').is(':checked'))
+					            options.timePicker24Hour = true;
+
+					          if ($('#timePickerIncrement').val().length && $('#timePickerIncrement').val() != 1)
+					            options.timePickerIncrement = parseInt($('#timePickerIncrement').val(), 10);
+
+					          if ($('#timePickerSeconds').is(':checked'))
+					            options.timePickerSeconds = true;
+
+					          if ($('#autoApply').is(':checked'))
+					            options.autoApply = true;
+
+					          if ($('#dateLimit').is(':checked'))
+					            options.dateLimit = { days: 7 };
+
+					          if ($('#ranges').is(':checked')) {
+					            options.ranges = {
+					              'Today': [moment(), moment()],
+					              'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+					              'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+					              'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+					              'This Month': [moment().startOf('month'), moment().endOf('month')],
+					              'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+					            };
+					          }
+
+					          if ($('#locale').is(':checked')) {
+					            $('#rtl-wrap').show();
+					            options.locale = {
+					              direction: $('#rtl').is(':checked') ? 'rtl' : 'ltr',
+					              format: 'MM/DD/YYYY HH:mm',
+					              separator: ' - ',
+					              applyLabel: 'Apply',
+					              cancelLabel: 'Cancel',
+					              fromLabel: 'From',
+					              toLabel: 'To',
+					              customRangeLabel: 'Custom',
+					              daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+					              monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+					              firstDay: 1
+					            };
+					          } else {
+					            $('#rtl-wrap').hide();
+					          }
+
+					          if (!$('#linkedCalendars').is(':checked'))
+					            options.linkedCalendars = false;
+
+					          if (!$('#autoUpdateInput').is(':checked'))
+					            options.autoUpdateInput = false;
+
+					          if (!$('#showCustomRangeLabel').is(':checked'))
+					            options.showCustomRangeLabel = false;
+
+					          if ($('#alwaysShowCalendars').is(':checked'))
+					            options.alwaysShowCalendars = true;
+
+					          if ($('#parentEl').val().length)
+					            options.parentEl = $('#parentEl').val();
+
+					          if ($('#startDate').val().length)
+					            options.startDate = $('#startDate').val();
+
+					          if ($('#endDate').val().length)
+					            options.endDate = $('#endDate').val();
+
+					          if ($('#minDate').val().length)
+					            options.minDate = $('#minDate').val();
+
+					          if ($('#maxDate').val().length)
+					            options.maxDate = $('#maxDate').val();
+
+					          if ($('#opens').val().length && $('#opens').val() != 'right')
+					            options.opens = $('#opens').val();
+
+					          if ($('#drops').val().length && $('#drops').val() != 'down')
+					            options.drops = $('#drops').val();
+
+					          if ($('#buttonClasses').val().length && $('#buttonClasses').val() != 'btn btn-sm')
+					            options.buttonClasses = $('#buttonClasses').val();
+
+					          if ($('#applyClass').val().length && $('#applyClass').val() != 'btn-success')
+					            options.applyClass = $('#applyClass').val();
+
+					          if ($('#cancelClass').val().length && $('#cancelClass').val() != 'btn-default')
+					            options.cancelClass = $('#cancelClass').val();
+
+					          $('#config-text').val("$('#demo').daterangepicker(" + JSON.stringify(options, null, '    ') + ", function(start, end, label) {\n  console.log(\"New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')\");\n});");
+
+					          $('#config-demo').daterangepicker(options, function(start, end, label) { console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')'); });
+
+					        }
+
+					      });
+					      </script>
+						</div>
+						<div>
+							<div class="col-md-4">
+								<h3>Người lớn</h3>
+								{% block adults %}{% endblock adults %}
+							</div>
+							<div class="col-md-4">
+								<h3>Trẻ em</h3>
+								{% block childrent %}{% endblock childrent %}
+							</div>
+							<div class="col-md-4">
+								<h3>Em bé</h3>
+								{% block baby %}{% endblock baby %}
+							</div>
+						</div>
+	                    {% block btn_book %}
+						<div>
+							<button type="submit" class="btn btn-primary" style="margin-left: 15px; margin-top: 42px; width: 410px" >
+								<h4>Đặt vé</h4>
+							</button>
+						</div>
+	                    {% endblock btn_book %}
+					</div>
+				</div>
+			</div>
+        </form>
+        {% endblock ticket_book %}
 		<!--//End-find-place-->
 
 		<!--start-holiday-types-->
+		{% block list_ticket %}
+
+		{% endblock list_ticket %}
 			<div class="holiday-types">
 				<div class="wrap">
 					<div class="holiday-type-head">
@@ -402,7 +873,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					</div>
 					<div class="footer-social-icons">
 						<ul>
-							<li><a class="face1 simptip-position-bottom simptip-movable" href="#"><span> </span></a></li>
+							<li><a class="face1 simptip-position-bottom simptip-movable" href="https://www.facebook.com/nguyenthibichmi"><span> </span></a></li>
 							<li><a class="twit1 simptip-position-bottom simptip-movable" href="#"><span> </span></a></li>
 							<li><a class="tub1 simptip-position-bottom simptip-movable" href="#"><span> </span></a></li>
 							<li><a class="pin1 simptip-position-bottom simptip-movable" href="#"><span> </span></a></li>
@@ -420,8 +891,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="wrap">
 				<ul>
 					<li><span>::</span><a href="{% static 'base.html' %}">Trang chủ</a><span>::</span></li>
-					<li><a href="destinations.html">Ưu đãi</a><span>::</span></li>
-					<li><a href="criuses.html">Blog</a><span>::</span></li>
+					<li><a href="dat-ve.html">Đặt vé</a><span>::</span></li>
+					<li><a href="criuses.html">Ưu đãi</a><span>::</span></li>
 					<li><a href="destinations.html">Liên hệ</a><span>::</span></li>
 					<div class="clear"> </div>
 				</ul>
@@ -430,6 +901,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 		</div>
 		<!--//End-subfooter-->
 		<!--//End-wrap-->
+	{% block logo %}
+	{% endblock logo %}
 	</body>
 </html>
 

@@ -1,5 +1,8 @@
 from django.db import models
+from django import forms
 from django.contrib.auth.models import AbstractUser
+
+from AirlineTicket import settings
 
 """
     UserType/Loại User
@@ -38,14 +41,14 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True)
     sex = models.CharField(max_length=20, null=True)
     nationality = models.CharField(max_length=100, null=True)
-    certificate_of_identity_card = models.IntegerField(null=True)
-    contact_telephone = models.IntegerField(null=True)
+    certificate_of_identity_card = models.CharField(max_length=50, null=True)
+    contact_telephone = models.CharField(max_length=20, null=True)
     user_type = models.ForeignKey(UserType, default=1)
 
     def __str__(self):
-        return ("%s - User Name:%s - Ho va Ten: %s %s - Birthday: %s - Gioi Tinh: %s - Quoc Tich: %s - Email: %s - CMND: %d - SDT: %d - Loai User:%s" % (
+        return ("%s - User Name:%s - Ho va Ten: %s %s - Birthday: %s - Gioi Tinh: %s - Quoc Tich: %s - Email: %s -CMND: %r - Loai User:%s" % (
             self.pk, self.username, self.last_name, self.first_name, self.date_of_birth, self.sex,self.nationality, self.email,
-            self.certificate_of_identity_card, self.contact_telephone, self.user_type_id))
+            self.certificate_of_identity_card, self.user_type_id))
 
 
 """
@@ -57,9 +60,7 @@ class User(AbstractUser):
 
 
 class SeatType(models.Model):
-    ECONOMY, PREMIUM_ECONOMY, BUSINESS = range(3)
-    SEATCLASS = ((ECONOMY, "Econnomy"), (PREMIUM_ECONOMY, "Premium Economy"), (BUSINESS, "Business"))
-    seat_class_name = models.SmallIntegerField(choices=SEATCLASS)
+    seat_class_name = models.CharField(max_length=100, null=True)
     seat_class_price = models.FloatField(null=True, blank=True, default=0.00)
 
     def __str__(self):
@@ -105,13 +106,15 @@ class TicketType(models.Model):
     Airline/hãng hàng không
     Documents:  id
                 airline_name : jestar
-                airline_price
+                airline_price:
+                picture: './images/airline-logo/jetstar.png'
 """
 
 
 class Airline(models.Model):
     airline_name = models.CharField(max_length=50)
     airline_price = models.FloatField(null=True, blank=True, default=0.00)
+    picture = models.FileField(upload_to='images/airline-logo/', null=True)
 
     def __str__(self):
         return ("%s - %s - %f " % (self.pk, self.airline_name, self.airline_price))
@@ -169,6 +172,12 @@ class FlightRoute(models.Model):
             self.pk, self.flight_route_name, self.from_airport, self.to_airport, self.distance))
 
 
+class Location(models.Model):
+    location_name = models.CharField(max_length=255, null=True)
+    def __str__(self):
+        return ("%s" % (self.location_name))
+
+
 """	
     Flight/chuyến bay
     Documents:  id
@@ -176,7 +185,8 @@ class FlightRoute(models.Model):
                 planes_id: mã máy bay
                 from_location : TPHCM
                 to_location : Ha Noi
-                departure_time: 10:30:00 29/08/2017
+                departure_day : 29/08/2017
+                departure_time: 10:30:00 
                 flight_time:  02:10:00
                 airport_mid/ Sân bay trung gian : Đà Nẵng
 """
@@ -185,22 +195,57 @@ class FlightRoute(models.Model):
 class Flight(models.Model):
     flight_route = models.ForeignKey(FlightRoute)
     planes = models.ForeignKey(Plane)
-    from_location = models.CharField(max_length=100)
-    to_location = models.CharField(max_length=100)
-    departure_time = models.DateTimeField(null=True, blank=True)
+    from_location = models.ForeignKey(Location, related_name='from_location', null=True)
+    to_location = models.ForeignKey(Location, related_name='to_location', null=True)
+    departure_day = models.DateField(null=True, blank=True)
+    departure_time = models.TimeField(null=True, blank=True)
     flight_time = models.TimeField()
-    airport_mid = models.ForeignKey(Airport)
+    airport_mid = models.ForeignKey(Airport, null=True)
     time_to_airport_mid = models.TimeField(null=True)
     time_from_airport_mid = models.TimeField(null=True)
 
     def __str__(self):
-        return ("%s - %s - %s - %s - %s - %s - %s - %s" % (
-            self.pk, self.from_location, self.to_location, self.departure_time, self.flight_time, self.airport_mid,
+        return ("%s - %s - %s - %s -%s - %s - %s - %s - %s" % (
+            self.pk, self.from_location, self.to_location,self.departure_day, self.departure_time, self.flight_time, self.airport_mid,
             self.time_to_airport_mid, self.time_from_airport_mid))
 
 
+
+
+
 """
-    BookTicket/đặt vé máy bay
+    BookInfo
+    Documents:  id
+                flight_id: chuyến bay id
+                seat_type_id /loại ghế id
+                ticket_type_id / loai vé id
+                airline_id / hãng hàng không
+                ticket_book_price: use algorithm
+                seat_number : 03
+
+"""
+
+
+class BookInfo(models.Model):
+    flight = models.ForeignKey(Flight, null=True)
+    seat_type = models.ForeignKey(SeatType)
+    ticket_type = models.ForeignKey(TicketType)
+    ticket_book_price = models.FloatField(null=True, blank=True, default=0.00)
+    airline = models.ForeignKey(Airline)
+    seat_number = models.IntegerField()
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return ("%s -%f - %d - %s - %s" % (self.pk, self.ticket_book_price, self.seat_number, self.status, self.airline.airline_name))
+
+
+"""
+    số ghế ngồi của từng hạng ghế  = số vé đã đặt của từng hạng ghế
+
+"""
+
+"""
+    TicketBook/đặt vé máy bay
     Documents : id
                 user_id : 01
                 flight_id:
@@ -209,39 +254,10 @@ class Flight(models.Model):
 
 class TicketBook(models.Model):
     user = models.ForeignKey(User, help_text='Khách Hàng')
-    flight = models.ForeignKey(Flight)
+    book_info = models.ForeignKey(BookInfo, related_name='book_info', null=True)
+
+
 
     def __str__(self):
         return ("%s - ID User book: %s - ID Flight: %s" % (
-            self.pk, self.user_id, self.flight_id))
-
-
-"""
-    BookInfo
-    Documents:  id
-                book_id: đặt vé id
-                type_seat_id /loại ghế id
-                type_ticket_id / loai vé id
-                airline_id / hãng hàng không
-                price_ticket_book: use algorithm
-                seat_number : 03
-
-"""
-
-
-class BookInfo(models.Model):
-    book = models.ForeignKey(TicketBook)
-    seat_type = models.ForeignKey(SeatType)
-    ticket_type = models.ForeignKey(TicketType)
-    airline = models.ForeignKey(Airline)
-    ticket_book_price = models.FloatField(null=True, blank=True, default=0.00)
-    seat_number = models.IntegerField()
-
-    def __str__(self):
-        return ("%s -%f - %d" % (self.pk, self.ticket_book_price, self.seat_number))
-
-
-"""
-    số ghế ngồi của từng hạng ghế  = số vé đã đặt của từng hạng ghế
-
-"""
+            self.pk, self.user_id, self.book_info))

@@ -1,41 +1,72 @@
 {% extends 'base.html' %}
 
-
 {% block title %}
     Vemba
 {% endblock title %}
 
-{% block content_main %}
-    <div class="top-nav">
-						<ul class="flexy-menu thick orange">
-							<li class="active"><a href="base.html">Trang chủ</a></li>
-							<li><a href="#">Đặt vé</a></li>
-							<li><a href="#">Ưu đãi</a></li>
-							<li><a href="#">Liên hệ</a></li>
-							{% if request.user.is_authenticated %}
-							<li><a type="button" href="{% url 'logout' %}">Đăng xuất</a></li>
-							{% else %}
-							<li><a type="button" data-toggle="modal" data-target="#myModal">Đăng nhập</a></li>
-							{%endif  %}
-						</ul>
-						<!-- <div class="search-box">
-							<div id="sb-search" class="sb-search">
-								<form>
-									<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search">
-									<input class="sb-search-submit" type="submit" value="">
-									<span class="sb-icon-search"> </span>
-								</form>
-							</div>
-						</div> -->
-						<!--search-scripts-->
-						<!-- <script src="js/modernizr.custom.js"></script>
-						<script src="js/classie.js"></script>
-						<script src="js/uisearch.js"></script>
-						<script>
-							new UISearch( document.getElementById( 'sb-search' ) );
-						</script> -->
-						<!--//search-scripts-->
-				</div>
-{% endblock content_main %}
 
+{% block seattype %}
+    <select class="form-control" id="cb-hang-ghe" name="SeatType" style="width: 80%">
+        {% for seat in seat_type %}
+        <option>{{ seat.seat_class_name}}</option>
+        {% endfor %}
+        <!--<option>Phổ thông</option>
+        <option>Phổ thông đặc biệt</option>
+        <option>Thương gia</option> -->
+    </select>
+{% endblock seattype %}
 
+{% block location_from %}
+    <select class="form-control" id="cb-start" name="LocationFrom" style="width: 80%">
+        {% for loca_f in location %}
+        <option>{{ loca_f.location_name }}</option>
+        {% endfor %}
+    </select>
+{% endblock location_from %}
+
+{% block location_to %}
+	<select class="form-control" id="cb-end" name="LocationTo" style="width: 80%">
+		{% for loca_to in location %}
+		<option>{{ loca_to.location_name }}</option>
+		{% endfor %}
+	</select>
+{% endblock location_to %}
+
+{% block adults %}
+	<select class="form-control" id="cb-nguoi-lon" name="AdultNo" style="width: 50%">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+	</select>
+{% endblock adults %}
+
+{% block childrent %}
+	<select class="form-control" id="cb-tre-em" name="ChildrenNo" style="width: 50%">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+	</select>
+{% endblock childrent %}
+
+{% block baby %}
+	<select class="form-control" id="cb-em-be" name="BabyNo" style="width: 50%">
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+	</select>
+{% endblock baby %}

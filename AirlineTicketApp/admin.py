@@ -14,4 +14,5 @@ admin.site.register(FlightRoute)
 admin.site.register(Plane)
 admin.site.register(TicketBook)
 admin.site.register(BookInfo)
+admin.site.register(Location)
 

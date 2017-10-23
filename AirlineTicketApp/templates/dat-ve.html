@@ -1,0 +1,138 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+	Đặt vé
+{% endblock title %}
+
+{% block content_main %}
+{{ block.super }}
+
+{% endblock content_main %}
+
+{% block images-slider %}
+	<!--
+	hình ảnh/ thanh trươt
+	-->
+{% endblock images-slider %}
+
+{% block find_place %}
+	<!-- {{ block.super }}
+	tìm va dat ve voi ba buoc don gian
+	-->
+{% endblock find_place %}
+
+{% block btn_book %}
+<!-- button dat ve -->
+{% endblock btn_book %}
+
+{% block location_from %}
+<!--<select class="form-control" id="cb-start" name="LocationFrom" style="width: 80%">-->
+	<label class="form form-control" id="cb-start" style="width: 80%">{{ ticket.LocationFrom }}</label>
+
+{% endblock location_from %}
+
+{% block location_to %}
+<label class="form form-control" id="cb-end" style="width: 80%">{{ ticket.LocationTo }}</label>
+<!--<select class="form-control" id="cb-end" name="LocationTo" style="width: 80%">-->
+	<!--<option>{{ LocationTo }}</option>-->
+<!--</select>-->
+{% endblock %}
+
+{% block seattype %}
+<label class="form form-control" id="cb-hang-ghe" style="width: 80%">{{ ticket.SeatType }}</label>
+<!--<select class="form-control" id="cb-hang-ghe" name="SeatType" style="width: 80%">-->
+	<!--<option>{{ SeatType }}</option>-->
+<!--</select>-->
+{% endblock %}
+
+{% block startdate %}
+<label class="form form-control" id="cb-start-day" style="width: 36%">{{ ticket.StartDate }}</label>
+{% endblock startdate %}
+
+{% block adults %}
+<label class="form-control" id="cb-nguoi-lon" name="AdultNo" style="width: 50%">
+	{{ ticket.AdultNo }}
+</label>
+{% endblock adults %}
+
+{% block childrent %}
+<label class="form-control" id="cb-tre-em" name="ChildrenNo" style="width: 50%">
+	{{ ticket.ChildrenNo }}
+</label>
+{% endblock childrent %}
+
+{% block baby %}
+<label class="form-control" id="cb-em-be" name="BabyNo" style="width: 50%">
+	{{ ticket.BabyNo }}
+</label>
+
+{% endblock %}
+
+
+
+{% block list_ticket %}
+
+{% for i in info %}
+	{% if i.status == False and ticket.LocationFrom ==  i.flight.from_location.location_name and ticket.LocationTo ==  i.flight.to_location.location_name and ticket.StartDate == i.flight.departure_day %}
+		<div class="container" style="margin-top: 3px; margin-bottom: 0px; border-radius: 5px; text-align: center; box-shadow: 0px 1px 10px #bbbbbb; vertical-align: middle; background-color: #ffffff">
+			<div class="row" style="margin: 0px 0px 10px 0px; color: #2c3e50">
+						<!-- 	logo
+					tên hãng bay 	 -->
+				<div class="col-md-2" style="text-align: center; margin-top: 20px">
+				<img id="airline-logo" src="{% static i.airline.picture %}" style="max-height: 30px;"><br/>
+
+				<h5  id="airline-name" style="font-weight: lighter;">{{ i.airline.airline_name }}</h5>
+
+				</div>
+
+				<!-- 	Giớ xuất phát
+						Nơi xuất phát -->
+
+				<div class="col-md-2" style="text-align: left;">
+					<h3 id="start-time" style="font-weight: bold;">{{ i.flight.departure_time }}</h3>
+					<h6 id="start-date">{{ i.flight.departure_day | date:"SHORT_DATE_FORMAT"}}</h6>
+					<h5 id="start-place">{{ i.flight.from_location.location_name }}</h5>
+				</div>
+
+				<div class="col-md-1" style="text-align: left; padding: 0px;">
+						<i class="glyphicon glyphicon-circle-arrow-right" style="margin-top: 50%; color: ##2c3e50; font-size: 20px"></i>
+				</div>
+
+				<!-- 	Giờ đến
+						Nơi đến	 -->
+
+				<div class="col-md-2" style="text-align: left;">
+					<h3 id="end-time" style="font-weight: bold;"> {{i.flight.departure_time }}</h3>
+					<h6 id="end-date">{{ i.flight.departure_day | date:"SHORT_DATE_FORMAT"}}</h6>
+					<h5 id="end-place">{{ i.flight.to_location.location_name }}</h5>
+				</div>
+
+				<!-- 	Tổng thời gian -->
+
+				<div class="col-md-2" style="text-align: left;">
+					<h3 id="total-time">{{ i.flight.flight_time | time:"H:i" }}</h3>
+				</div>
+
+				<!-- 	Chi phí	 -->
+
+				<div class="col-md-3" style="text-align: center;">
+					<h3 id="price-per-person" style="font-weight: bold; color: #ff9900">Gia</h3>
+					<button class="btn btn-success" style="width: 80%;">Chọn</button>
+				</div>
+
+				<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+
+{% endblock list_ticket %}
