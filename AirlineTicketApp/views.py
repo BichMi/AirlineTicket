@@ -7,6 +7,7 @@ from .models import UserType, User, TicketBook, BookInfo, Airline, SeatType, Loc
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from .services import get_common_data
+from django.db.models.fields import Field, LOOKUP_SEP
 
 
 def index(request):
@@ -74,7 +75,7 @@ def ticket_book_view(request):
         import json
         context_data = json.loads(json.dumps(request.GET))
 
-        info = BookInfo.objects.select_related().all()
+        info = BookInfo.objects.all()
 
         context_data = {
             "ticket":context_data,

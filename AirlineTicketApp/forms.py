@@ -103,9 +103,6 @@ class FlightForm(forms.ModelForm):
     class Meta:
         model = Flight
         fields = ("departure_day", "departure_time", "flight_time", "airport_mid","time_to_airport_mid", "time_from_airport_mid")
-        widgets = {
-            "departure_day": forms.DateField(input_formats=settings.DATE_INPUT_FORMATS),
-        }
 
 
     def __init__(self, *args, **kwargs):

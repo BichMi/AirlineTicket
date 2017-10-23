@@ -6,7 +6,7 @@ def get_common_data():
     location = Location.objects.all()
     airline = Airline.objects.all()
     ticket_book = TicketBook.objects.all()
-    book_info = BookInfo.objects.filter()
+    book_info = BookInfo.objects.all()
 
 
     return {
