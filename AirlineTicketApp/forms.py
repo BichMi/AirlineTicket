@@ -26,7 +26,6 @@ class RegisterForm(forms.ModelForm):
     certificate_of_identity_card = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Chứng minh thư", "required": True}))
     contact_telephone = forms.CharField(required=True,widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Số điện thoại", "required": True}) )
     confirm_password = forms.CharField(max_length=20, widget=PasswordInput(attrs={"class": "form-control", "placeholder": "Nhâp lại mật khẩu", "required": True}))
-    forms.Select
     class Meta:
         model = User
         fields = ("username", "first_name", "last_name", "email","confirm_password", "date_of_birth", "sex", "nationality", "certificate_of_identity_card", "contact_telephone", "password")

@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^register/$', register_user_view, name='register'),
     url(r'^ticket_book/$', ticket_book_view, name='ticket_book'),
     url(r'^book_info/$', book_info_view, name=' book_info'),
+  #  url(r'^book_info_detail/(?P<book_info_id>[0-9]+)/$', book_info_detail_view, name=' book_info'),
 ]

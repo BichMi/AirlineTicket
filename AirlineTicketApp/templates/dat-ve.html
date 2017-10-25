@@ -7,6 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 {% extends 'base.html' %}
 
 {% load static %}
+{% load AirlineTicketApp_extras %}
 
 {% block title %}
 	Đặt vé
@@ -54,7 +55,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 {% endblock %}
 
 {% block startdate %}
-<label class="form form-control" id="cb-start-day" style="width: 36%">{{ ticket.StartDate }}</label>
+<label class="form form-control" id="cb-start-day" style="width: 36%">{{ ticket.StartDate}}</label>
 {% endblock startdate %}
 
 {% block adults %}
@@ -78,10 +79,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
 {% block list_ticket %}
 	{% for i in info%}
-		{% if i.status == False and ticket.LocationFrom ==  i.flight.from_location.location_name and ticket.LocationTo ==  i.flight.to_location.location_name %}
 			<div class="container" style="margin-top: 3px; margin-bottom: 0px; border-radius: 5px; text-align: center; box-shadow: 0px 1px 10px #bbbbbb; vertical-align: middle; background-color: #ffffff">
 				<div class="row" style="margin: 0px 0px 10px 0px; color: #2c3e50">
-							<!-- 	logo
+							<!-- 	logo and (ticket.StartDate | formatdate) == i.flight.departure_day
 						tên hãng bay 	 -->
 					<div class="col-md-2" style="text-align: center; margin-top: 20px">
 					<img id="airline-logo" src="{% static i.airline.picture %}" style="max-height: 30px;"><br/>
@@ -94,7 +94,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							Nơi xuất phát -->
 
 					<div class="col-md-2" style="text-align: left;">
-						<h3 id="start-time" style="font-weight: bold;">{{ i.flight.departure_time }}</h3>
+						<h3 id="start-time" style="font-weight: bold;">{{ i.flight.departure_time | time:"H:i"}}</h3>
 						<h6 id="start-date">{{ i.flight.departure_day | date:"SHORT_DATE_FORMAT"}}</h6>
 						<h5 id="start-place">{{ i.flight.from_location.location_name }}</h5>
 					</div>
@@ -107,28 +107,37 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							Nơi đến	 -->
 
 					<div class="col-md-2" style="text-align: left;">
-						<h3 id="end-time" style="font-weight: bold;"> {{i.flight.departure_time }}</h3>
-						<h6 id="end-date">{{ i.flight.departure_day | date:"SHORT_DATE_FORMAT"}}</h6>
+						<h3 id="end-time" style="font-weight: bold;"> {{i.flight.arrive_time | time:"H:i" }}</h3>
+						<h6 id="end-date">{{ i.flight.arrive_day | date:"SHORT_DATE_FORMAT" }}</h6>
 						<h5 id="end-place">{{ i.flight.to_location.location_name }}</h5>
 					</div>
 
 					<!-- 	Tổng thời gian -->
 
 					<div class="col-md-2" style="text-align: left;">
-						<h3 id="total-time">{{ i.flight.flight_time | time:"H:i" }}</h3>
+						<h3 id="total-time" style="font-weight: bold;">{{ i.flight.flight_time | time:"H:i" }}</h3>
 					</div>
 
 					<!-- 	Chi phí	 -->
 
 					<div class="col-md-3" style="text-align: center;">
-						<h3 id="price-per-person" style="font-weight: bold; color: #ff9900">Gia</h3>
-						<button class="btn btn-success" style="width: 80%;">Chọn</button>
+						<h3 id="price-per-person" style="font-weight: bold; color: #ff9900">{{i.ticket_book_price}}VND</h3>
+						<form method="get">
+							<input type="hidden" name="AdultNo" value="{{ ticket.AdultNo  }}" />
+							<input type="hidden" name="ChildrenNo" value="{{ ticket.ChildrenNo  }}" />
+							<input type="hidden" name="BabyNo" value="{{ ticket.BabyNo  }}" />
+							<input type="hidden" name="Gia" value="">
+
+							<input type="hidden" name="BookInfoId" value="{{ i.pk }}" >
+							<input type="submit" onclick="alert('Đặt vé thành công!')" value="Chon" class="btn btn-success" style="width: 80%;" />
+						</form>
+
 					</div>
 
 					<div class="clear"></div>
 
 				</div>
 			</div>
-		{% endif %}
+
 	{% endfor %}
 {% endblock list_ticket %}
