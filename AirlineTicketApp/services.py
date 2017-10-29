@@ -7,8 +7,6 @@ def get_common_data():
     airline = Airline.objects.all()
     ticket_book = TicketBook.objects.all()
     book_info = BookInfo.objects.all()
-
-
     return {
         "seat_type": seat_type,
         "location": location,
@@ -16,3 +14,5 @@ def get_common_data():
         "ticket_book": ticket_book,
         "book_info": book_info,
     }
+
+

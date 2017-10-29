@@ -1,22 +1,19 @@
 from django import forms
 from django.forms import PasswordInput
-
-from AirlineTicket import settings
 from AirlineTicketApp.models import User, UserType, TicketBook, BookInfo, Flight, Airline, Location
-
 
 class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ("username", "password")
-
         widgets = {
-            "username": forms.TextInput(attrs={"class": "form-control", "placeholder": "Tài khoản", "required": True}),
-            "password": forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Mật khẩu", "required": True})
+            "username": forms.TextInput(attrs={"class": "form-control",
+                                               "placeholder": "Tài khoản", "required": True}),
+            "password": forms.PasswordInput(attrs={"class": "form-control",
+                                                   "placeholder": "Mật khẩu", "required": True})
         }
 
 class RegisterForm(forms.ModelForm):
-
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Nhập tên", "required": True}))
     last_name = forms.CharField(required=True, widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Nhập họ", "required": True}))
     email = forms.EmailField(required=True,  widget= forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email", "required": True}))

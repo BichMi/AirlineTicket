@@ -122,32 +122,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<li><label><a type="button" data-toggle="modal" data-target="#myModal">Đăng nhập</a></label></li>
 							{%endif  %}
 						</ul>
-						<!-- <div class="search-box">
-							<div id="sb-search" class="sb-search">
-								<form>
-									<input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search">
-									<input class="sb-search-submit" type="submit" value="">
-									<span class="sb-icon-search"> </span>
-								</form>
-							</div>
-						</div> -->
-						<!--search-scripts-->
-						<!-- <script src="js/modernizr.custom.js"></script>
-						<script src="js/classie.js"></script>
-						<script src="js/uisearch.js"></script>
-						<script>
-							new UISearch( document.getElementById( 'sb-search' ) );
-						</script> -->
-						<!--//search-scripts-->
+
 				</div>
                     {% endblock content_main %}
-				<!-- <div class="top-userinfo-nav">
-						<ul class="login-menu thick orange">
-							<li class="login"><a href="">Đăng nhập</a></li>
-						</ul>
 
-				</div> -->
-				<!-- //End-top-nav-->
 				<div class="clear"> </div>
 			</div>
 			<!--//End-header-->
@@ -157,7 +135,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 
         {% block contentlogin %}
         <div class="modal fade" id="myModal" role="dialog">
-
 
             <div class="modal-dialog">
 
@@ -170,8 +147,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                             </button>
                         </div>
 
-
-                        <!-- Begin # DIV Form -->
+                       <!-- Begin # DIV Form -->
                         <div id="div-forms">
 
                             <!-- Begin # Login Form -->
@@ -183,11 +159,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                         <div id="icon-login-msg" class="glyphicon glyphicon-chevron-right"></div>
                                         <span id="text-login-msg">Nhập tài khoản, mật khẩu của bạn.</span>
                                     </div>
-                                    <!--<input id="login_username" class="form-control" type="text" placeholder="Tài khoản" required>-->
-									{{ login_form.username }}
-
-                                    <!--<input id="login_password" class="form-control" type="password" placeholder="Mật khẩu" required>-->
-									{{ login_form.password }}
+                                   	{{ login_form.username }}
+                                    {{ login_form.password }}
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox"> Nhớ tài khoản
@@ -198,7 +171,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                                     <div>
                                         <span><button type="submit" class="btn btn-primary btn-lg btn-block">Đăng nhập</button>
                                         <button id="login_register_btn" type="button" class="btn btn-link btn-block">Đăng ký</button></span>
-
                                         <button id="login_lost_btn" type="button" class="btn btn-link btn-block">Quên mật khẩu?</button>
                                     </div>
                                 </div>

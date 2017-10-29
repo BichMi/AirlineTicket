@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'timedeltatemplatefilter',
     'AirlineTicketApp.apps.AirlineticketappConfig'
 ]
 
@@ -124,5 +123,3 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = 'static/'
 
 AUTH_USER_MODEL = 'AirlineTicketApp.User'
-
-DATE_INPUT_FORMATS = ('%m/%d/%Y')

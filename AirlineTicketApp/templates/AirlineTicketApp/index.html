@@ -4,15 +4,11 @@
     Vemba
 {% endblock title %}
 
-
 {% block seattype %}
     <select class="form-control" id="cb-hang-ghe" name="SeatType" style="width: 80%">
         {% for seat in seat_type %}
         <option>{{ seat.seat_class_name}}</option>
         {% endfor %}
-        <!--<option>Phổ thông</option>
-        <option>Phổ thông đặc biệt</option>
-        <option>Thương gia</option> -->
     </select>
 {% endblock seattype %}
 

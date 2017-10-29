@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.http import HttpResponseNotFound
 from django.contrib.auth import login, authenticate, logout
-from .forms import LoginForm, RegisterForm, TicketBookForm, FlightForm, BookInfoForm, Airline
+from .forms import LoginForm, RegisterForm, TicketBookForm, FlightForm, BookInfoForm, AirlineForm
 from .models import UserType, User, TicketBook, BookInfo, Airline, SeatType, Location, Flight, FlightRoute, TicketType
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -10,23 +10,19 @@ from .services import get_common_data
 from datetime import  datetime
 from django.db.models.fields import Field, LOOKUP_SEP
 
-
 def index(request):
    data = get_common_data()
    login_form = LoginForm()
    register_form = RegisterForm()
    book_info_form = BookInfoForm()
    ticket_book_form = TicketBook()
-
    context = {
        "register_form": register_form,
        "login_form": login_form,
        "book_info_form": book_info_form,
        "ticket_book_form": ticket_book_form
    }
-
    context.update(data)
-
    return render(request, 'AirlineTicketApp/index.html', context)
 
 
